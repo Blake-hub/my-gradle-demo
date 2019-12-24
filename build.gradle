@@ -1,87 +1,20 @@
-CREATE ALGORITHM=UNDEFINED DEFINER=`appadmin`@`%` SQL SECURITY DEFINER VIEW `RPT_Suggestion_Delivered_Factor_v`
-AS SELECT
-`RPT`.`externalId` AS `externalId`,
-`RPT`.`suggestionLifeCycleId` AS `suggestionLifeCycleId`,
-`RPT`.`runId` AS `runId`,
-`RPT`.`runUID` AS `runUID`,
-`RPT`.`repTeamId` AS `repTeamId`,
-`AKT`.`cluster` AS `repTeamUID`,
-`AKT`.`cluster` AS `repTeamName`,
-`RPT`.`seConfigId` AS `seConfigId`,
-`RPT`.`seConfigName` AS `seConfigName`,
-`RPT`.`runGroupId` AS `runGroupId`,
-`RPT`.`suggestedDate` AS `suggestedDate`,
-`RPT`.`startDateLocal` AS `startDateLocal`,
-`RPT`.`repId` AS `repId`,
-`RPT`.`repUID` AS `repUID`,
-`RPT`.`repName` AS `repName`,
-`RPT`.`repCreatedAt` AS `repCreatedAt`,
-`RPT`.`accountId` AS `accountId`,
-`RPT`.`accountUID` AS `accountUID`,
-`RPT`.`runRepDateSuggestionId` AS `runRepDateSuggestionId`,
-`RPT`.`accountName` AS `accountName`,
-`RPT`.`detailRepActionTypeId` AS `detailRepActionTypeId`,
-`RPT`.`detailRepActionTypeUID` AS `detailRepActionTypeUID`,(case when (`RPT`.`detailRepActionName` = 'VISIT_DETAIL') then 'VISIT' else `RPT`.`detailRepActionName` end) AS `detailRepActionName`,
-`RPT`.`runRepDateSuggestionDetailId` AS `runRepDateSuggestionDetailId`,
-`RPT`.`productId` AS `productId`,
-`RPT`.`productUID` AS `productUID`,
-`RPT`.`productName` AS `productName`,
-`RPT`.`messageId` AS `messageId`,
-`RPT`.`messageUID` AS `messageUID`,
-`RPT`.`messageName` AS `messageName`,
-`RPT`.`suggestionUID` AS `suggestionUID`,
-`RPT`.`suggestionReferenceId` AS `suggestionReferenceId`,
-`RPT`.`lastViewedAt` AS `lastViewedAt`,
-`RPT`.`viewedAt` AS `viewedAt`,
-`RPT`.`viewedDuration` AS `viewedDuration`,
-`RPT`.`actionTaken` AS `actionTaken`,
-`RPT`.`actionTaken_dt` AS `actionTaken_dt`,
-`RPT`.`isSuggestionCompleted` AS `isSuggestionCompleted`,
-`RPT`.`isSuggestionCompletedDirect` AS `isSuggestionCompletedDirect`,
-`RPT`.`isSuggestionCompletedInfer` AS `isSuggestionCompletedInfer`,
-`RPT`.`isSuggestionDismissed` AS `isSuggestionDismissed`,
-`RPT`.`dismissReasonType` AS `dismissReasonType`,if(((`RPT`.`dismissCount` = 1) and isnull(ifnull(`SED`.`dismissResponse`,
-        `AKTD`.`Dismiss_Reason`))),'Dismissed No Option Selected',ifnull(`SED`.`dismissResponse`,
-        `AKTD`.`Dismiss_Reason`)) AS `dismissReason`,
-`RPT`.`dismissReason_dt` AS `dismissReason_dt`,
-`RPT`.`isSuggestionActive` AS `isSuggestionActive`,
-`RPT`.`facilityLatitude` AS `facilityLatitude`,
-`RPT`.`facilityLongitude` AS `facilityLongitude`,
-`RPT`.`facilityGeoLocationString` AS `facilityGeoLocationString`,
-`RPT`.`repLatitude` AS `repLatitude`,
-`RPT`.`repLongitude` AS `repLongitude`,
-`RPT`.`territoryCityName` AS `territoryCityName`,
-`AKT`.`districtName` AS `districtName`,
-`AKT`.`territoryId` AS `territoryId`,(case when ('eu' = 'eu') then `AKT`.`territoryName` else concat(`AKT`.`territoryName`,'-',`AKT`.`repName`) end) AS `territoryName`,
-`AKT`.`regionName` AS `regionName`,
-`RPT`.`regionGroup` AS `regionGroup`,
-`RPT`.`dismissedAt` AS `dismissedAt`,
-`RPT`.`dismissCount` AS `dismissCount`,
-`RPT`.`lastPublishedAt` AS `lastPublishedAt`,
-`RPT`.`createdAt` AS `createdAt`,
-`RPT`.`updatedAt` AS `updatedAt`,
-`RPT`.`reportedInteractionUID` AS `reportedInteractionUID`,
-`RPT`.`inferredInteractionUID` AS `inferredInteractionUID`,
-`RPT`.`interactionUID` AS `interactionUID`,
-`RPT`.`completedAt` AS `completedAt`,
-`RPT`.`inferredAt` AS `inferredAt`,
-`RPT`.`isFirstSuggestedDate` AS `isFirstSuggestedDate`,
-`RPT`.`isLastSuggestedDate` AS `isLastSuggestedDate`,
-`RPT`.`suggestionDriver` AS `suggestionDriver`,
-`RPT`.`crmFieldName` AS `crmFieldName`,
-`RPT`.`reasonText` AS `reasonText`,
-`RPT`.`reasonRank` AS `reasonRank`,
-`RPT`.`runRepDateSuggestionReasonId` AS `runRepDateSuggestionReasonId`,
-`RPT`.`repRole` AS `repRole`,
-`RPT`.`repBag` AS `repBag`,ifnull(`AKT`.`dmUID`,'') AS `dmUID`,ifnull(`AKT`.`dmName`,'') AS `dmName`,(case when (`RPT`.`factorUID` = 'DSE_SUGGESTED_GENERATOR') then concat((case when (`RPT`.`detailRepActionName` = 'VISIT_DETAIL') then 'VISIT' else `RPT`.`detailRepActionName` end),' ','Channel',' - ',`RPT`.`productName`) when (`RPT`.`factorUID` = 'Visit Channel') then 'Channel Context Factor' else `RPT`.`factorName` end) AS `factorName`,(case when (`RPT`.`factorUID` = 'DSE_SUGGESTED_GENERATOR') then 'InternalSuggestionHeader' else `RPT`.`factorType` end) AS `factorType`,
-`RPT`.`factorUID` AS `factorUID`,
-`RPT`.`factorUID_drs` AS `factorUID_drs`,
-`RPT`.`actionOrder` AS `actionOrder`,
-`RPT`.`interactionId` AS `interactionId`,
-`RPT`.`isCompleted` AS `isCompleted`,
-`RPT`.`startDateTime` AS `startDateTime`,
-`RPT`.`isREMix` AS `isREMix`,
-`RPT`.`isDSESpark` AS `isDSESpark`,
-`RPT`.`arc_createdAt` AS `arc_createdAt`,
-`RPT`.`arc_updatedAt` AS `arc_updatedAt`
-FROM ((((((`bayeritprod_stage`.`RPT_Suggestion_Delivered_Factor_stg` `RPT` join `bayeritprod`.`RPT_DSERun_v` `d` on((`RPT`.`runId` = `d`.`runId`))) join `bayeritprod_stage`.`rpt_dim_calendar` `CALEN` on((`CALEN`.`datefield` = `RPT`.`startDateLocal`))) left join `bayeritprod_stage`.`AKT_DismissHoldBehavior` `AKTD` on(find_in_set(`AKTD`.`Dismiss_Type_Ref`,`RPT`.`dismissReasonType`))) left join `bayeritprod`.`SuggestionEnhancedDismissal` `SED` on((`SED`.`suggestionReferenceId` = `RPT`.`suggestionReferenceId`))) join `bayeritprod_stage`.`AKT_RepLicense_arc` `AKT` on(((`AKT`.`externalId` = `RPT`.`repUID`) and (`RPT`.`startDateLocal` between `AKT`.`startDate` and `AKT`.`endDate`)))) join `bayeritprod_stage`.`RPT_Go_Live_Filter` `gl`) where ((`CALEN`.`calendar_year` >= (year(now()) - 1)) and (`RPT`.`startDateLocal` >= `gl`.`goLiveDate`) and ((case when ((((`CALEN`.`is_holiday` = 1) or (`CALEN`.`is_weekend` = 1)) = 1) and (`RPT`.`actionTaken` = 'No Action Taken')) then 1 else 0 end) = 0));
+plugins {
+    id 'groovy'
+}
+
+group 'com.my'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile 'org.codehaus.groovy:groovy-all:2.3.11'
+    compile 'org.projectlombok:lombok:1.16.20'
+    compile 'org.apache.logging.log4j:log4j-slf4j-impl:2.10.0'
+    compile 'org.apache.logging.log4j:log4j-core:2.10.0'
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+}
+
+
